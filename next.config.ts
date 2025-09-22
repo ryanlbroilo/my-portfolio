@@ -1,11 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: "export",
-  basePath: "/my-portfolio",
-  assetPrefix: "/my-portfolio/",
-  experimental: {
-    appDir: true,
+import { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  swcMinify: true, 
+  compiler: {
+    styledComponents: true, 
+  },
+  images: {
+    unoptimized: true, 
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
