@@ -5,7 +5,7 @@
   "homepage": "https://ryanlbroilo.github.io/my-portfolio",
   "scripts": {
     
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build --turbopack",
     "export": "next export",
     "deploy": "gh-pages -d out",

@@ -2,12 +2,11 @@ import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true, 
   compiler: {
-    styledComponents: true, 
+    styledComponents: true,
   },
   images: {
-    unoptimized: true, 
+    unoptimized: true,
   },
 };
 
