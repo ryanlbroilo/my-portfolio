@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@font-face {
+  font-family: "Amiga Normal";
+  src: url("/fonts/AmigaNormal.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Amiga Normal", monospace;
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
