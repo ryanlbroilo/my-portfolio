@@ -58,7 +58,7 @@ public/
 
 ## 🌐 Deploy
 
-Você pode acessar a versão online do portfolio [aqui]([https://ryanlbroilo.github.io/my-portfolio](https://my-portfolio-wheat-rho-12.vercel.app)
+Você pode acessar a versão online do portfolio [aqui](https://my-portfolio-wheat-rho-12.vercel.app)
 
 
 
