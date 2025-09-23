@@ -94,22 +94,11 @@ const TopLineText = styled.div`
   margin-bottom: 0.5em;
 `;
 
-// --- LINHA RGB + CARRO ---
+// --- LINHA RGB ---
 const rgbAnim = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-`;
-
-const RoadContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: flex-end;
-  pointer-events: none;
 `;
 
 const RGBLine = styled.div`
@@ -131,43 +120,19 @@ const RGBLine = styled.div`
   );
   background-size: 200% 200%;
   animation: ${rgbAnim} 5s linear infinite;
-  z-index: 5;
+  z-index: 10;
 `;
 
-const CarImg = styled.img<{ left: number; isBoosting: boolean }>`
+// --- CARRO ---
+const CarImg = styled.img<{ left: number }>`
   position: absolute;
-  bottom: 6px;
+  bottom: -7%;
   width: 250px;
   height: auto;
   z-index: 10;
   left: ${({ left }) => left}px;
   transform: translateX(-50%);
-  filter: ${({ isBoosting }) =>
-    isBoosting
-      ? "drop-shadow(0 0 25px rgba(255, 0, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 255, 0, 0.8))"
-      : "drop-shadow(0 5px 20px rgba(255, 255, 255, 0.6))"};
-  transition: filter 0.2s ease-in-out;
-  cursor: pointer;
-`;
-
-// --- FAÍSCAS ---
-const sparkAnim = keyframes`
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  50% { transform: translateY(-20px) scale(0.8); opacity: 0.8; }
-  100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
-`;
-
-const Spark = styled.div<{ left: number }>`
-  position: absolute;
-  bottom: 40px;
-  left: ${({ left }) => left}px;
-  width: 6px;
-  height: 6px;
-  background: yellow;
-  border-radius: 50%;
-  box-shadow: 0 0 10px orange, 0 0 20px red;
-  animation: ${sparkAnim} 0.6s linear forwards;
-  z-index: 9;
+  filter: drop-shadow(0 5px 20px rgba(255, 255, 255, 0.6));
 `;
 
 // --- HERO COMPONENT ---
@@ -177,9 +142,6 @@ const Hero: React.FC = () => {
   const [currentText, setCurrentText] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const [carLeft, setCarLeft] = useState(0);
-  const [carSpeed, setCarSpeed] = useState(2);
-  const [isBoosting, setIsBoosting] = useState(false);
-  const [sparks, setSparks] = useState<number[]>([]);
 
   useEffect(() => setCarLeft(window.innerWidth / 2), []);
 
@@ -226,17 +188,15 @@ const Hero: React.FC = () => {
           opacity: 0.5 + Math.random() * 0.5,
         };
         setLines((prev) => [...prev, newLine]);
-        setTimeout(
-          () => setLines((prev) => prev.filter((l) => l !== newLine)),
-          newLine.speed * 1000
-        );
+        setTimeout(() => setLines((prev) => prev.filter((l) => l !== newLine)), newLine.speed * 1000);
       }
     }, 60);
     return () => clearInterval(interval);
   }, []);
 
-  // Movimento do carro
+  // Carro horizontal
   useEffect(() => {
+    const carSpeed = 2;
     const interval = setInterval(() => {
       setCarLeft((prev) => {
         if (prev < -150) return window.innerWidth + 150;
@@ -244,25 +204,7 @@ const Hero: React.FC = () => {
       });
     }, 16);
     return () => clearInterval(interval);
-  }, [carSpeed]);
-
-  // Clique para acelerar
-  const handleCarClick = () => {
-    if (isBoosting) return;
-    setCarSpeed(8);
-    setIsBoosting(true);
-
-    // Criar faíscas periódicas durante o boost
-    const sparkInterval = setInterval(() => {
-      setSparks((prev) => [...prev, Date.now()]);
-    }, 100);
-
-    setTimeout(() => {
-      setCarSpeed(2);
-      setIsBoosting(false);
-      clearInterval(sparkInterval);
-    }, 2000);
-  };
+  }, []);
 
   return (
     <HeroContainer>
@@ -273,22 +215,7 @@ const Hero: React.FC = () => {
       </TextContainer>
 
       <CarContainer ref={containerRef}>
-        <RoadContainer>
-          <CarImg
-            src="/images/car2.gif"
-            alt="Car"
-            left={carLeft}
-            onClick={handleCarClick}
-            isBoosting={isBoosting}
-          />
-          <RGBLine />
-        </RoadContainer>
-
-        {/* Sparks */}
-        {sparks.map((id) => (
-          <Spark key={id} left={carLeft} />
-        ))}
-
+        <CarImg src="/images/car2.gif" alt="Car" left={carLeft} />
         {lines.map((line, idx) => (
           <SpeedLineDiv
             key={idx}
@@ -300,6 +227,7 @@ const Hero: React.FC = () => {
             opacity={line.opacity}
           />
         ))}
+        <RGBLine />
       </CarContainer>
     </HeroContainer>
   );
