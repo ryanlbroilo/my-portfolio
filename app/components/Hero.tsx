@@ -94,11 +94,22 @@ const TopLineText = styled.div`
   margin-bottom: 0.5em;
 `;
 
-// --- LINHA RGB ---
+// --- LINHA RGB + CARRO ---
 const rgbAnim = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+`;
+
+const RoadContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px; /* altura da "pista" */
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
 `;
 
 const RGBLine = styled.div`
@@ -120,13 +131,12 @@ const RGBLine = styled.div`
   );
   background-size: 200% 200%;
   animation: ${rgbAnim} 5s linear infinite;
-  z-index: 10;
+  z-index: 5;
 `;
 
-// --- CARRO ---
 const CarImg = styled.img<{ left: number }>`
   position: absolute;
-  bottom: -7%;
+  bottom: 6px; /* sempre colado em cima da faixa */
   width: 250px;
   height: auto;
   z-index: 10;
@@ -188,7 +198,10 @@ const Hero: React.FC = () => {
           opacity: 0.5 + Math.random() * 0.5,
         };
         setLines((prev) => [...prev, newLine]);
-        setTimeout(() => setLines((prev) => prev.filter((l) => l !== newLine)), newLine.speed * 1000);
+        setTimeout(
+          () => setLines((prev) => prev.filter((l) => l !== newLine)),
+          newLine.speed * 1000
+        );
       }
     }, 60);
     return () => clearInterval(interval);
@@ -215,7 +228,11 @@ const Hero: React.FC = () => {
       </TextContainer>
 
       <CarContainer ref={containerRef}>
-        <CarImg src="/images/car2.gif" alt="Car" left={carLeft} />
+        <RoadContainer>
+          <CarImg src="/images/car2.gif" alt="Car" left={carLeft} />
+          <RGBLine />
+        </RoadContainer>
+
         {lines.map((line, idx) => (
           <SpeedLineDiv
             key={idx}
@@ -227,7 +244,6 @@ const Hero: React.FC = () => {
             opacity={line.opacity}
           />
         ))}
-        <RGBLine />
       </CarContainer>
     </HeroContainer>
   );

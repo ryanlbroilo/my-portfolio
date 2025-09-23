@@ -10,16 +10,32 @@ const floatAnim = keyframes`
   100% { transform: translateY(0px); }
 `;
 
-// --- CONTAINER DOS ÍCONES ---
+// --- CONTAINER ---
+const IconsWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  justify-items: center;
+  align-items: center;
+  gap: 1rem;
+
+  /* Modo "desktop retrô" */
+  @media (min-width: 1024px) {
+    display: block;
+  }
+`;
+
 interface IconProps {
-  top: string;
-  left: string;
+  top?: string;
+  left?: string;
 }
 
 const IconContainer = styled.div<IconProps>`
   position: absolute;
-  top: ${({ top }) => top};
-  left: ${({ left }) => left};
+  top: ${({ top }) => top || "0"};
+  left: ${({ left }) => left || "0"};
   width: 100px;
   height: 90px;
   background-color: #c0c0c0;
@@ -37,6 +53,11 @@ const IconContainer = styled.div<IconProps>`
     transform: translateY(-5px) scale(1.05);
     box-shadow: 0 0 15px #00ffff;
   }
+
+  /* Mobile/Tablet override */
+  @media (max-width: 1023px) {
+    position: static;
+  }
 `;
 
 const IconImage = styled.img`
@@ -53,14 +74,12 @@ const IconLabel = styled.div`
   font-family: "Amiga Normal", monospace;
 `;
 
-// --- TIPOS DE MODAL ---
 export type ModalType = "projects" | "about" | "contact";
 
 interface PortfolioProps {
   onIconClick: (type: ModalType) => void;
 }
 
-// --- COMPOENTE PRINCIPAL ---
 const Portfolio: React.FC<PortfolioProps> = ({ onIconClick }) => {
   const icons: { src: string; label: string; modal: ModalType; top: string; left: string }[] = [
     { src: "/icons/projects.png", label: "Projetos", modal: "projects", top: "25%", left: "5%" },
@@ -69,14 +88,14 @@ const Portfolio: React.FC<PortfolioProps> = ({ onIconClick }) => {
   ];
 
   return (
-    <>
+    <IconsWrapper>
       {icons.map((icon, idx) => (
         <IconContainer key={idx} top={icon.top} left={icon.left} onClick={() => onIconClick(icon.modal)}>
           <IconImage src={icon.src} alt={icon.label} />
           <IconLabel>{icon.label}</IconLabel>
         </IconContainer>
       ))}
-    </>
+    </IconsWrapper>
   );
 };
 
