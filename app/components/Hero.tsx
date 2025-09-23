@@ -106,7 +106,7 @@ const RoadContainer = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px; /* altura da "pista" */
+  height: 100px;
   display: flex;
   align-items: flex-end;
   pointer-events: none;
@@ -134,15 +134,40 @@ const RGBLine = styled.div`
   z-index: 5;
 `;
 
-const CarImg = styled.img<{ left: number }>`
+const CarImg = styled.img<{ left: number; isBoosting: boolean }>`
   position: absolute;
-  bottom: 6px; /* sempre colado em cima da faixa */
+  bottom: 6px;
   width: 250px;
   height: auto;
   z-index: 10;
   left: ${({ left }) => left}px;
   transform: translateX(-50%);
-  filter: drop-shadow(0 5px 20px rgba(255, 255, 255, 0.6));
+  filter: ${({ isBoosting }) =>
+    isBoosting
+      ? "drop-shadow(0 0 25px rgba(255, 0, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 255, 0, 0.8))"
+      : "drop-shadow(0 5px 20px rgba(255, 255, 255, 0.6))"};
+  transition: filter 0.2s ease-in-out;
+  cursor: pointer;
+`;
+
+// --- FAÍSCAS ---
+const sparkAnim = keyframes`
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  50% { transform: translateY(-20px) scale(0.8); opacity: 0.8; }
+  100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+`;
+
+const Spark = styled.div<{ left: number }>`
+  position: absolute;
+  bottom: 40px;
+  left: ${({ left }) => left}px;
+  width: 6px;
+  height: 6px;
+  background: yellow;
+  border-radius: 50%;
+  box-shadow: 0 0 10px orange, 0 0 20px red;
+  animation: ${sparkAnim} 0.6s linear forwards;
+  z-index: 9;
 `;
 
 // --- HERO COMPONENT ---
@@ -152,6 +177,9 @@ const Hero: React.FC = () => {
   const [currentText, setCurrentText] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const [carLeft, setCarLeft] = useState(0);
+  const [carSpeed, setCarSpeed] = useState(2);
+  const [isBoosting, setIsBoosting] = useState(false);
+  const [sparks, setSparks] = useState<number[]>([]);
 
   useEffect(() => setCarLeft(window.innerWidth / 2), []);
 
@@ -207,9 +235,8 @@ const Hero: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Carro horizontal
+  // Movimento do carro
   useEffect(() => {
-    const carSpeed = 2;
     const interval = setInterval(() => {
       setCarLeft((prev) => {
         if (prev < -150) return window.innerWidth + 150;
@@ -217,7 +244,25 @@ const Hero: React.FC = () => {
       });
     }, 16);
     return () => clearInterval(interval);
-  }, []);
+  }, [carSpeed]);
+
+  // Clique para acelerar
+  const handleCarClick = () => {
+    if (isBoosting) return;
+    setCarSpeed(8);
+    setIsBoosting(true);
+
+    // Criar faíscas periódicas durante o boost
+    const sparkInterval = setInterval(() => {
+      setSparks((prev) => [...prev, Date.now()]);
+    }, 100);
+
+    setTimeout(() => {
+      setCarSpeed(2);
+      setIsBoosting(false);
+      clearInterval(sparkInterval);
+    }, 2000);
+  };
 
   return (
     <HeroContainer>
@@ -229,9 +274,20 @@ const Hero: React.FC = () => {
 
       <CarContainer ref={containerRef}>
         <RoadContainer>
-          <CarImg src="/images/car2.gif" alt="Car" left={carLeft} />
+          <CarImg
+            src="/images/car2.gif"
+            alt="Car"
+            left={carLeft}
+            onClick={handleCarClick}
+            isBoosting={isBoosting}
+          />
           <RGBLine />
         </RoadContainer>
+
+        {/* Sparks */}
+        {sparks.map((id) => (
+          <Spark key={id} left={carLeft} />
+        ))}
 
         {lines.map((line, idx) => (
           <SpeedLineDiv
