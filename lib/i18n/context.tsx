@@ -3,7 +3,8 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { translations, type Locale } from "./translations";
 
-type Translations = typeof translations.pt;
+/** Tipo das traduções para qualquer locale (pt | en) */
+type Translations = (typeof translations)[Locale];
 
 const LanguageContext = createContext<{
   locale: Locale;
