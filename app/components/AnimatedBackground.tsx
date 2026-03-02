@@ -7,7 +7,7 @@ export default function AnimatedBackground() {
     <div
       className="fixed inset-0 overflow-hidden pointer-events-none z-0"
       aria-hidden
-      style={{ minHeight: "100vh", minHeight: "100dvh" }}
+      style={{ minHeight: "100dvh" }}
     >
       {/* Base escuro - cobre todo o site */}
       <div className="absolute inset-0 bg-[#050505]" />

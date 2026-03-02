@@ -66,7 +66,7 @@ export default function IntroOverlay({ onComplete }: Props) {
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [phaseIndex, phase, phases.length]);
+  }, [phaseIndex, phase, phases.length, onComplete]);
 
   const handleExitComplete = () => {
     if (exiting) {

@@ -8,7 +8,6 @@ import { useLanguage } from "@/lib/i18n/context";
 const TYPE_SPEED = 80;
 const DELETE_SPEED = 50;
 const PAUSE_AFTER_TYPE = 1800;
-const PAUSE_AFTER_DELETE = 400;
 
 const BIRTH_DATE = new Date(2003, 11, 6); // 06/12/2003 (mês 0-indexed)
 const EXPERIENCE_START_YEAR = 2021;

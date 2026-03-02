@@ -15,12 +15,10 @@ const STORAGE_KEY = "portfolio-locale";
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("pt");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Locale | null;
     if (stored === "pt" || stored === "en") setLocaleState(stored);
-    setMounted(true);
   }, []);
 
   const setLocale = useCallback((next: Locale) => {
