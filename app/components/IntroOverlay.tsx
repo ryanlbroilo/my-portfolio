@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,14 +8,14 @@ const SKIP_STORAGE_KEY = "portfolio-intro-seen";
 
 /** Duração (ms) de cada etapa antes de passar para a próxima */
 const PHASE_DURATIONS = [
-  1400,  // 0: welcome
-  1100,  // 1: iam
-  2200,  // 2: name
-  1900,  // 3: role
-  2200,  // 4: focus
-  2400,  // 5: where
-  2800,  // 6: mission
-  2200,  // 7: enter
+  1400, // 0: welcome
+  1100, // 1: iam
+  2200, // 2: name
+  1900, // 3: role
+  2200, // 4: focus
+  2400, // 5: where
+  2800, // 6: mission
+  2200, // 7: enter
 ];
 
 const FADE_OUT_MS = 700;
@@ -37,7 +37,10 @@ const slideUp = {
   initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -16 },
-  transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  transition: {
+    duration: 0.5,
+    ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+  },
 };
 
 export default function IntroOverlay({ onComplete }: Props) {
@@ -45,11 +48,23 @@ export default function IntroOverlay({ onComplete }: Props) {
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [exiting, setExiting] = useState(false);
 
-  const phases: Phase[] = ["welcome", "iam", "name", "role", "focus", "where", "mission", "enter"];
+  const phases: Phase[] = [
+    "welcome",
+    "iam",
+    "name",
+    "role",
+    "focus",
+    "where",
+    "mission",
+    "enter",
+  ];
   const phase = exiting ? "out" : phases[phaseIndex];
 
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem(SKIP_STORAGE_KEY)) {
+    if (
+      typeof window !== "undefined" &&
+      sessionStorage.getItem(SKIP_STORAGE_KEY)
+    ) {
       onComplete();
       return;
     }
@@ -117,13 +132,25 @@ export default function IntroOverlay({ onComplete }: Props) {
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.55,
+                ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+              }}
             >
               <motion.h1
                 className="text-white font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight"
                 initial={{ opacity: 0, y: 32 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.06,
+                  ease: [0.22, 1, 0.36, 1] as [
+                    number,
+                    number,
+                    number,
+                    number,
+                  ],
+                }}
               >
                 {t.hero.name}
               </motion.h1>
@@ -211,3 +238,4 @@ export default function IntroOverlay({ onComplete }: Props) {
     </motion.div>
   );
 }
+
