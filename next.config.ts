@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.jsdelivr.net", pathname: "/**" },
+    ],
+  },
 };
 
 export default nextConfig;
