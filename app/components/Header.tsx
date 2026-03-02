@@ -9,7 +9,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useLanguage();
 
-  const navItems = [
+  const navItems: { label: string; href: string; external?: boolean }[] = [
     { label: t.nav.projects, href: "#work" },
     { label: t.nav.about, href: "#about" },
     { label: t.nav.contact, href: "#contact" },
