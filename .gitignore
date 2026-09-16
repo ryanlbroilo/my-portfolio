@@ -5,3 +5,5 @@ out/
 .env.local
 
 .vercel
+.impeccable/*.local.json
+.impeccable/hook.cache.json
